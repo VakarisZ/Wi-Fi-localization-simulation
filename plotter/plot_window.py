@@ -8,8 +8,8 @@ class PlotWindow:
         # Plot are setup
         figsize = 7, 7
         self.fig, self.ax = plt.subplots(figsize=figsize)
-        self.ax.set(xlim=(params.area['xmin'], params.area['xmax']),
-                    ylim=(params.area['ymin'], params.area['ymax']))
+        self.ax.set(xlim=(params.area.x_min, params.area.x_max),
+                    ylim=(params.area.y_min, params.area.y_max))
         self.ax.set_title(title)
 
     def add_point(self, x, y, color='red', markersize=5, marker='o'):

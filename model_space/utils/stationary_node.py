@@ -1,9 +1,9 @@
+from initial_config import StationaryNodeParams
 from model_space.utils.node import Node
-from model_space.utils.point import Point
 
 
 class StationaryNode(Node):
-    def __init__(self, coords: Point, range):
-        super().__init__(coords=coords,
+    def __init__(self, params: StationaryNodeParams):
+        super().__init__(coords=params.location_coords,
                          style={'color': 'blue', 'marker': 'o', 'markersize': 5})
-        self.range = range
+        self.range = params.range

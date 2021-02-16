@@ -10,10 +10,10 @@ prediction_model = PredictionModel(ModelConfig())
 plt.draw()
 plt.show(block=False)
 
-for i in range(100):
+for i in range(1000):
     real_model.do_iteration(i)
-    prediction_model.do_iteration(i)
-    plt.pause(0.1)
+    # prediction_model.do_iteration(i)
+    plt.pause(0.01)
 
 while True:
     pass
