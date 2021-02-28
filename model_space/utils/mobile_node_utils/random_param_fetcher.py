@@ -24,3 +24,7 @@ def get_random_avoidance_turn_sharpness():
 
 def get_random_trajectory():
     return randrange(0, 360)
+
+
+def get_random_straight_move_iterations():
+    return randrange(ModelConfig.straight_move_range[0], ModelConfig.straight_move_range[1])

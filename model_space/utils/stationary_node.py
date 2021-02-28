@@ -7,3 +7,5 @@ class StationaryNode(Node):
         super().__init__(coords=params.location_coords,
                          style={'color': 'blue', 'marker': 'o', 'markersize': 5})
         self.range = params.range
+        self.id = params.id
+        self.distance_to_mn = None

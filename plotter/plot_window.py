@@ -24,6 +24,9 @@ class PlotWindow:
                             [point1.y, point2.y],
                             color=color, markersize=markersize, marker=marker)
 
+    def add_annotation(self, x, y, content):
+        plt.annotate(content, (x, y))
+
     def redraw_point(self, point, new_x, new_y):
         new_point = self.add_point(new_x, new_y,
                                    color=point[0].get_color(),

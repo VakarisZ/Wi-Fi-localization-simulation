@@ -40,6 +40,8 @@ class ModelDrawer:
         self.mobile_node = self.draw_node(mobile_node)
 
     def draw_node(self, node):
+        if hasattr(node, 'id'):
+            self.window.add_annotation(x=node.coords.x, y=node.coords.y, content=node.id)
         return self.window.add_point(x=node.coords.x,
                                      y=node.coords.y,
                                      color=node.style['color'],
