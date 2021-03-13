@@ -1,6 +1,6 @@
 import math
 from copy import deepcopy
-from math import acos, cos, atan2, sin
+from math import acos, cos, sin
 from typing import List, Tuple
 
 from model_space.prediction_model.utils.prediction_dto import MnLocationPrediction
@@ -38,19 +38,26 @@ def get_possible_points(last_location: MnLocationPrediction,
                         mn_speed: float) -> Tuple[Point, Point]:
     x1 = last_location.location.x  # X1
     y1 = last_location.location.y  # Y1
-    x2 = current_sn.coords.x  # X2
-    y2 = current_sn.coords.y  # Y2
+    x2 = float(current_sn.coords.x)  # X2
+    y2 = float(current_sn.coords.y)  # Y2
+    u = x2 - x1
+    v = y2 - y1
 
     d12 = math.dist([x2, y2], [x1, y1])  # Distance 12
-    d13 = mn_speed  # Distance 13
+    d13 = float(mn_speed)  # Distance 13
     d23 = current_sn.distance_to_mn  # Distance 23
 
-    a1 = acos((d12 ** 2 + d13 ** 2 - d23 ** 2) / (2 * d12 * d13))  # Angle 1
+    cos_ther_result = (d12 ** 2 + d13 ** 2 - d23 ** 2) / (2 * d12 * d13)
+    a1 = acos_error_compliant(cos_ther_result)  # Angle 1
 
-    x3 = x1 + d13 * cos(atan2(x2 - x1, y2 - y1) + a1)  # X3
-    x3_alt = x1 + d13 * cos(atan2(x2 - x1, y2 - y1) - a1)  # X3 alt
-    y3 = y1 + d13 * sin(atan2(x2 - x1, y2 - y1) + a1)  # Y3
-    y3_alt = y1 + d13 * sin(atan2(x2 - x1, y2 - y1) - a1)  # Y3 alt
+    RHS1 = x1 * u + y1 * v + d13 * d12 * cos(a1)
+    RHS2 = y2 * u - x2 * v + d13 * d12 * sin(a1)
+    x3 = (1 / d12 ** 2) * (u * RHS1 - v * RHS2)
+    y3 = (1 / d12 ** 2) * (v * RHS1 + u * RHS2)
+
+    RHS2_alt = y2 * u - x2 * v - d13 * d12 * sin(a1)
+    x3_alt = (1 / d12 ** 2) * (u * RHS1 - v * RHS2_alt)
+    y3_alt = (1 / d12 ** 2) * (v * RHS1 + u * RHS2_alt)
 
     p1 = Point(x3, y3)
     p2 = Point(x3_alt, y3_alt)
@@ -64,3 +71,12 @@ def get_sn_from_list(node_id: str, node_list: List[StationaryNode]) -> Stationar
     if not node:
         return node_list[0]
     return node[0]
+
+
+def acos_error_compliant(value: float):
+    if value > 1:
+        return acos(1)
+    elif value < -1:
+        return acos(-1)
+    else:
+        return acos(value)

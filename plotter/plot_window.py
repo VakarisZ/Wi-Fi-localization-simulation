@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
 
-from initial_config import ModelConfig
+from config import ModelConfig
 
 
 class PlotWindow:

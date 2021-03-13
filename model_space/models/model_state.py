@@ -1,4 +1,4 @@
-from initial_config import ModelConfig
+from config import ModelConfig
 from model_space.utils.mobile_node import MobileNode
 from model_space.utils.stationary_node import StationaryNode
 

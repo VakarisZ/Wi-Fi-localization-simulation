@@ -3,7 +3,7 @@ from copy import deepcopy
 from math import atan2
 from typing import Tuple, List
 
-from initial_config import ModelConfig
+from config import ModelConfig
 from model_space.prediction_model.utils.prediction_dto import MnLocationPrediction
 from model_space.utils.point import Point
 

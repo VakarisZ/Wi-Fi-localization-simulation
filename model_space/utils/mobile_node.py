@@ -1,4 +1,4 @@
-from initial_config import ModelConfig, MobileNodeParams
+from config import ModelConfig, MobileNodeParams
 from model_space.utils.colision_avoidance import get_direction_by_danger_walls, is_colision_avoidance_needed, \
     DangerWalls, get_best_angle_change
 from model_space.utils.deg_to_coord_converter import CoordsChange, normalize_trajectory_degrees

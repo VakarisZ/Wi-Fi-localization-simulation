@@ -1,7 +1,7 @@
 from copy import deepcopy
 from typing import List
 
-from initial_config import ModelConfig
+from config import ModelConfig
 from model_space.prediction_model.prediction_params import PredictionParams
 from model_space.prediction_model.shadow_predictor import get_node_prediction
 from model_space.prediction_model.utils.prediction_dto import MnLocationPrediction
@@ -36,12 +36,26 @@ class MnPredictor:
 
     @staticmethod
     def _do_trilateration(pred_params: PredictionParams) -> MnLocationPrediction:
-        # TODO do the actual trilateration instead of faking
-        if pred_params.mobile_node:
-            x, y = pred_params.mobile_node.coords.x, pred_params.mobile_node.coords.x
-            return MnLocationPrediction(Point(x, y), deepcopy(pred_params.stationary_nodes))
-        else:
-            raise Exception("Trilateration not yet implemented, we use actual node parameters instead of predicting.")
+        # A function to apply trilateration formulas to return the (x,y) intersection point of three circles
+        sn_list = pred_params.stationary_nodes
+        x1, y1 = sn_list[0].coords.x, sn_list[0].coords.y
+        r1 = sn_list[0].distance_to_mn
+
+        x2, y2 = sn_list[1].coords.x, sn_list[1].coords.y
+        r2 = sn_list[1].distance_to_mn
+
+        x3, y3 = sn_list[2].coords.x, sn_list[2].coords.y
+        r3 = sn_list[2].distance_to_mn
+
+        A = 2 * x2 - 2 * x1
+        B = 2 * y2 - 2 * y1
+        C = r1 ** 2 - r2 ** 2 - x1 ** 2 + x2 ** 2 - y1 ** 2 + y2 ** 2
+        D = 2 * x3 - 2 * x2
+        E = 2 * y3 - 2 * y2
+        F = r2 ** 2 - r3 ** 2 - x2 ** 2 + x3 ** 2 - y2 ** 2 + y3 ** 2
+        x = (C * E - F * B) / (E * A - B * D)
+        y = (C * D - A * F) / (B * D - A * E)
+        return MnLocationPrediction(Point(x, y), deepcopy(sn_list))
 
     def _do_shadow_alg(self, pred_params: PredictionParams) -> MnLocationPrediction:
         return get_node_prediction(history=self.mn_pred_list,

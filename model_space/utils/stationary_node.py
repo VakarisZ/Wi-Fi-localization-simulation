@@ -1,4 +1,4 @@
-from initial_config import StationaryNodeParams
+from config import StationaryNodeParams
 from model_space.utils.node import Node
 
 

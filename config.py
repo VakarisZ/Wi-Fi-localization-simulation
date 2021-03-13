@@ -26,8 +26,14 @@ class AreaParams:
 
 @dataclass
 class ModelConfig:
+    # UI:
+    show_simulation_plots = True
+    show_error_plots = True
+
     # Global params
-    random_seed = 'test6'
+    sim_cnt = 10
+    seed = 'test'
+    iteration_count = 200
     area = AreaParams(x_min=-100, x_max=100, y_min=-100, y_max=100)
     mobile_node_params = MobileNodeParams(start_coords=Point(x=0, y=0), speed=1)
     stationary_node_param_list = [StationaryNodeParams(location_coords=Point(-90, 50), range=110, id=" 1"),

@@ -1,6 +1,6 @@
 import math
 
-from initial_config import ModelConfig
+from config import ModelConfig
 from model_space.models.model_state import ModelState
 from model_space.utils.point import Point
 from plotter.plot_window import PlotWindow

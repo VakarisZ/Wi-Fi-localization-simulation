@@ -1,10 +1,10 @@
 import random
 from random import randrange
 
-from initial_config import ModelConfig
+from config import ModelConfig
 
 
-random.seed(ModelConfig.random_seed)
+random.seed(ModelConfig.seed)
 
 
 def get_random_angle_change():

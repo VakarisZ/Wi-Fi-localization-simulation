@@ -2,6 +2,7 @@ import math
 from copy import deepcopy
 from typing import List
 
+from config import ModelConfig
 from model_space.models.model_space import ModelSpace
 from model_space.prediction_model.prediction_params import PredictionParams
 from model_space.utils.node import Node
@@ -15,12 +16,12 @@ class RealModel(ModelSpace):
 
     def do_iteration(self, i):
         self.model_state.mobile_node.move()
-        self.model_drawer.draw_state(self.model_state)
+        if ModelConfig.show_simulation_plots:
+            self.model_drawer.draw_state(self.model_state)
 
     def get_params_for_prediction(self) -> PredictionParams:
         sn_list = self._get_stationary_nodes()
         params = PredictionParams(stationary_nodes=sn_list)
-        params.mobile_node = self.model_state.mobile_node
         return deepcopy(params)
 
     def _get_stationary_nodes(self) -> List[StationaryNode]:
