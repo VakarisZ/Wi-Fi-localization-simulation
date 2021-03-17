@@ -14,7 +14,9 @@ def get_node_prediction(history: List[MnLocationPrediction],
                         mn_speed: float) -> MnLocationPrediction:
     possible_locations = calculate_possible_locations(history, sn_params, mn_speed)
     if len(sn_params) > 1:
-        predicted_location = two_sn_choice.get_correct_prediction(possible_locations, sn_params[1])
+        predicted_location = two_sn_choice.get_correct_prediction(possible_locations,
+                                                                  history[-1].location,
+                                                                  mn_speed)
     else:
         predicted_location = one_sn_choice.get_correct_prediction(possible_locations, history)
     return MnLocationPrediction(predicted_location, deepcopy(sn_params))
@@ -23,29 +25,40 @@ def get_node_prediction(history: List[MnLocationPrediction],
 def calculate_possible_locations(history: List[MnLocationPrediction],
                                  sn_params: List[StationaryNode],
                                  mn_speed: float) -> Tuple[Point, Point]:
-    last_location = history[-1]
-    # We need to do the calculations with the same sn
-    last_sn_params = last_location.sn_list[0]
-    current_sn_params = get_sn_from_list(last_sn_params.id, sn_params)
+    # for two stationary nodes, don't use history
+    if len(sn_params) > 1:
+        pnt1 = sn_params[0].coords
+        pnt2 = sn_params[1].coords
+        # Sides are marked according to the point they oppose, e.g. d12 is opposite to point 3, d23 to point 1 etc.
+        d12 = math.dist(pnt1.as_list(), pnt2.as_list())
+        d13 = sn_params[0].distance_to_mn
+        d23 = sn_params[1].distance_to_mn
+    else:
+        last_location = history[-1]
+        # We need to do the calculations with the same sn
+        last_sn_params = last_location.sn_list[0]
+        current_sn_params = get_sn_from_list(last_sn_params.id, sn_params)
+        pnt1 = last_location.location
+        pnt2 = current_sn_params.coords
+        d12 = math.dist(pnt1.as_list(), pnt2.as_list())  # Distance 12
+        d13 = float(mn_speed)  # Distance 13
+        d23 = current_sn_params.distance_to_mn  # Distance 23
 
-    return get_possible_points(last_location,
-                               current_sn_params,
-                               mn_speed)
+    return get_third_point_locations(pnt1, pnt2, d12, d13, d23)
 
 
-def get_possible_points(last_location: MnLocationPrediction,
-                        current_sn: StationaryNode,
-                        mn_speed: float) -> Tuple[Point, Point]:
-    x1 = last_location.location.x  # X1
-    y1 = last_location.location.y  # Y1
-    x2 = float(current_sn.coords.x)  # X2
-    y2 = float(current_sn.coords.y)  # Y2
+def get_third_point_locations(pnt1: Point,
+                              pnt2: Point,
+                              d12: float,
+                              d13: float,
+                              d23: float):
+    x1 = pnt1.x
+    y1 = pnt1.y
+    x2 = pnt2.x
+    y2 = pnt2.y
+
     u = x2 - x1
     v = y2 - y1
-
-    d12 = math.dist([x2, y2], [x1, y1])  # Distance 12
-    d13 = float(mn_speed)  # Distance 13
-    d23 = current_sn.distance_to_mn  # Distance 23
 
     cos_ther_result = (d12 ** 2 + d13 ** 2 - d23 ** 2) / (2 * d12 * d13)
     a1 = acos_error_compliant(cos_ther_result)  # Angle 1

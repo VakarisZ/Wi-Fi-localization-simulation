@@ -29,10 +29,13 @@ class ModelConfig:
     # UI:
     show_simulation_plots = True
     show_error_plots = True
+    wall_color = 'red'
+    draw_margin = 5
+    show_mn_history = True
 
     # Global params
-    sim_cnt = 10
-    seed = 'test'
+    sim_cnt = 1
+    seed = 'test69'
     iteration_count = 200
     area = AreaParams(x_min=-100, x_max=100, y_min=-100, y_max=100)
     mobile_node_params = MobileNodeParams(start_coords=Point(x=0, y=0), speed=1)

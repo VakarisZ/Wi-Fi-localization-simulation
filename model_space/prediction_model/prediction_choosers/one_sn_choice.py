@@ -44,7 +44,7 @@ def get_new_list_with_angle_appended(angle_list: List[float], angle: float):
 
 def get_history_angles(history: List[MnLocationPrediction], count: int) -> List[float]:
     line_angles = []
-    for i in range(1, count):
+    for i in range(-count, 0):
         point_1 = history[i - 1].location
         point_2 = history[i].location
         line_angles.append(get_line_angle(point_1, point_2))
@@ -78,8 +78,12 @@ def compare_angle_change_consistency(angle_changes1: List[float], angle_changes2
         return angle_changes2
 
 
+# TODO improve this method
 def get_angle_change_consistency(angle_changes: List[float]):
-    return abs(angle_changes[-2] - angle_changes[-1])
+    overflow = abs(angle_changes[-2] - angle_changes[-1] + 360)
+    underflow = abs(angle_changes[-2] - angle_changes[-1] - 360)
+    no_overflow = abs(angle_changes[-2] - angle_changes[-1])
+    return min([no_overflow, overflow, underflow])
 
 
 def get_correct_angle(angle_choice: List[float], target: float) -> float:

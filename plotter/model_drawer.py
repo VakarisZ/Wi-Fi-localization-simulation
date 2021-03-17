@@ -21,8 +21,14 @@ class ModelDrawer:
         self.draw_lines_for_stationary_nodes(model_state)
 
     def clean_state(self):
-        # remove mn
-        self.mobile_node.pop(0).remove()
+        if ModelConfig.show_mn_history:
+            # change mn style
+            mn = self.mobile_node.pop(0)
+            mn._color = 'black'
+            mn._markersize = 2.5
+        else:
+            # remove mn
+            self.mobile_node.pop(0).remove()
         # remove all lines
         [line.pop(0).remove() for line in self.lines]
         self.lines = []
