@@ -22,7 +22,7 @@ class RealModel(ModelSpace):
     def get_params_for_prediction(self) -> PredictionParams:
         sn_list = self._get_stationary_nodes()
         params = PredictionParams(stationary_nodes=sn_list)
-        return deepcopy(params)
+        return params
 
     def _get_stationary_nodes(self) -> List[StationaryNode]:
         sn_list = []

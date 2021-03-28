@@ -27,6 +27,8 @@ class Turner:
             return True
         elif self.initial_angle_change < 0 <= self.angle_change:
             return True
+        elif self.initial_angle_change == 0 and self.angle_change == 0:
+            return True
         else:
             return False
 

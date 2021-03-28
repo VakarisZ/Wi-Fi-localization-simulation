@@ -12,6 +12,7 @@ from model_space.utils.node import Node
 TURNING = 'turning'
 MOVING_STRAIGHT = 'moving_straight'
 
+
 class MobileNode(Node):
 
     def __init__(self, mobile_node_params: MobileNodeParams):
@@ -26,6 +27,7 @@ class MobileNode(Node):
         self.turner = Turner()
         # Handles moving straight
         self.straight_mover = StraightMover()
+        self.straight_mover.setup_new_move()
         # Which walls node was close to
         self.danger_walls = DangerWalls()
 
@@ -41,7 +43,7 @@ class MobileNode(Node):
                 self.movement_type = MOVING_STRAIGHT
                 new_trajectory = self.straight_mover.get_next_trajectory(self.current_trajectory)
         elif self.movement_type == MOVING_STRAIGHT:
-            if not self.straight_mover.is_moving_straight_finished():
+            if self.straight_mover.is_moving_straight_finished():
                 new_trajectory = self.straight_mover.get_next_trajectory(self.current_trajectory)
             else:
                 self.turner.setup_new_turn()

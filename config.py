@@ -27,15 +27,17 @@ class AreaParams:
 @dataclass
 class ModelConfig:
     # UI:
-    show_simulation_plots = True
-    show_error_plots = True
+    show_simulation_plots = False
+    show_error_plots = False
+    show_global_error_plot = True
     wall_color = 'red'
     draw_margin = 5
     show_mn_history = True
 
     # Global params
-    sim_cnt = 1
-    seed = 'test69'
+    sim_cnt = 30
+
+    seed = 'test'
     iteration_count = 200
     area = AreaParams(x_min=-100, x_max=100, y_min=-100, y_max=100)
     mobile_node_params = MobileNodeParams(start_coords=Point(x=0, y=0), speed=1)
@@ -48,7 +50,8 @@ class ModelConfig:
     collision_avoidance_turn_sharpness_range = (8, 12)  # We want sharper turns to avoid collision
     angle_change_range = (-180, 180)  # Angles to turn
     danger_range = 17  # Percentage of danger in the map zone, where node should turn away in order not to hit the wall.
-    straight_move_range = (4, 20)  # How many iterations to move straight after a turn
+    move_straight = True
+    straight_move_range = (10, 30)  # How many iterations to move straight after a turn
 
     # Shadow prediction params
     mn_history_usage = 5

@@ -55,7 +55,7 @@ class MnPredictor:
         F = r2 ** 2 - r3 ** 2 - x2 ** 2 + x3 ** 2 - y2 ** 2 + y3 ** 2
         x = (C * E - F * B) / (E * A - B * D)
         y = (C * D - A * F) / (B * D - A * E)
-        return MnLocationPrediction(Point(x, y), deepcopy(sn_list))
+        return MnLocationPrediction(Point(x, y), sn_list)
 
     def _do_shadow_alg(self, pred_params: PredictionParams) -> MnLocationPrediction:
         return get_node_prediction(history=self.mn_pred_list,

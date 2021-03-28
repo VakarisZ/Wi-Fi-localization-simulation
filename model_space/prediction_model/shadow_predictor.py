@@ -1,5 +1,4 @@
 import math
-from copy import deepcopy
 from math import acos, cos, sin
 from typing import List, Tuple
 
@@ -19,7 +18,7 @@ def get_node_prediction(history: List[MnLocationPrediction],
                                                                   mn_speed)
     else:
         predicted_location = one_sn_choice.get_correct_prediction(possible_locations, history)
-    return MnLocationPrediction(predicted_location, deepcopy(sn_params))
+    return MnLocationPrediction(predicted_location, sn_params)
 
 
 def calculate_possible_locations(history: List[MnLocationPrediction],
