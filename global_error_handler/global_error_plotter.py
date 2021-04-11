@@ -1,31 +1,36 @@
-from typing import List
-
 import matplotlib.pyplot as plt
 
-from global_error_handler.global_error_aggregate import GlobalErrorAggregate
+from global_error_handler.sn_method_error_container import SnMethodErrorContainer
 
 
-def plot_global_errors(three_sn_errors: List[GlobalErrorAggregate],
-                       two_sn_errors: List[GlobalErrorAggregate],
-                       one_sn_errors: List[GlobalErrorAggregate]):
-    plot_global_error_aggregates(three_sn_errors, "")
+def plot_global_errors(three_sn_errors: SnMethodErrorContainer,
+                       two_sn_errors: SnMethodErrorContainer,
+                       one_sn_errors: SnMethodErrorContainer):
+    plot_global_error_aggregates(three_sn_errors, 'Three SN errors')
+    plot_global_error_aggregates(two_sn_errors, 'Two SN errors')
+    plot_global_error_aggregates(one_sn_errors, 'One SN errors')
 
 
-def plot_global_error_aggregates(errors: List[GlobalErrorAggregate], title: str):
+def plot_global_error_aggregates(errors: SnMethodErrorContainer, title: str):
     fig, ax = plt.subplots()
+    fig.set_size_inches(20, 9)
 
-    avg_errors = [aggregate.get_avg_error() for aggregate in errors]
+    avg_errors = [error_on_iteration.get_avg_error() for error_on_iteration in errors.errors_on_iteration]
+    error_counts = [str(len(error_aggregate.errors)) for error_aggregate in errors.errors_on_iteration]
 
-    hbars = ax.bar(range(len(avg_errors)), avg_errors, xerr=error, align='center')
-    ax.set_yticks(y_pos)
-    ax.set_yticklabels(people)
-    ax.invert_yaxis()  # labels read top-to-bottom
-    ax.set_xlabel('Performance')
-    ax.set_title('How fast do you want to go today?')
+    ax.bar(x=range(0, len(avg_errors)*2, 2),
+           height=avg_errors,
+           align='center',
+           tick_label=error_counts,
+           linewidth=len(avg_errors)*[20])
+    ax.set_xlabel('Iteration')
+    ax.set_title(title)
 
-    # Label with given captions, custom padding and annotate options
-    ax.bar_label(hbars, labels=['±%.2f' % e for e in error],
-                 padding=8, color='b', fontsize=14)
-    ax.set_xlim(right=16)
+    ax.plot([0,  len(avg_errors)*2], [errors.avg_sn_method_error, errors.avg_sn_method_error],
+            color='red',
+            marker='o')
+    ax.plot([0, len(avg_errors) * 2], [errors.avg_pred_error, errors.avg_pred_error],
+            color='black',
+            marker='o')
 
     plt.show()

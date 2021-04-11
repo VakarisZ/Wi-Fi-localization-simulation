@@ -29,6 +29,7 @@ class ModelConfig:
     # UI:
     show_simulation_plots = False
     show_error_plots = False
+    show_only_big_error_plots = False
     show_global_error_plot = True
     wall_color = 'red'
     draw_margin = 5

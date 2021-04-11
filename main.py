@@ -1,9 +1,11 @@
 import random
+from typing import List
 
 import matplotlib.pyplot as plt
 
 from config import ModelConfig
 from global_error_handler.error_grouper import group_errors_to_method_and_iteration
+from global_error_handler.error_list import ErrorList
 from global_error_handler.global_error_container import GlobalErrorContainer
 from global_error_handler.global_error_plotter import plot_global_errors
 from model_space.models.prediction_model import PredictionModel
@@ -15,6 +17,14 @@ from prediction_errors.pred_error_handler import PredErrorHandler
 seed = ModelConfig.seed
 
 all_errors = GlobalErrorContainer()
+
+
+def count_average_error(errors: List[ErrorList]) -> float:
+    all_errors = []
+    for error_list in errors:
+        all_errors.extend(error_list.errors)
+    return sum(all_errors) / len(all_errors)
+
 
 for i in range(ModelConfig.sim_cnt):
     if ModelConfig.sim_cnt > 1:
@@ -42,10 +52,12 @@ for i in range(ModelConfig.sim_cnt):
 
     all_errors.add_error_list(pred_error_handle.pred_errors)
 
-if ModelConfig.show_error_plots:
-    three_sn_errors, two_sn_errors, one_sn_errors = group_errors_to_method_and_iteration(all_errors.error_lists)
+if ModelConfig.show_global_error_plot:
+    average_error = count_average_error(all_errors.error_lists)
+    three_sn_errors, \
+    two_sn_errors, \
+    one_sn_errors = group_errors_to_method_and_iteration(all_errors.error_lists, average_error)
+
     plot_global_errors(three_sn_errors, two_sn_errors, one_sn_errors)
 
-
-
-#input("Simulation finished")
+# input("Simulation finished")
