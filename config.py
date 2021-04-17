@@ -27,7 +27,7 @@ class AreaParams:
 @dataclass
 class ModelConfig:
     # UI:
-    show_simulation_plots = False
+    show_simulation_plots = True
     show_error_plots = False
     show_only_big_error_plots = False
     show_global_error_plot = True
@@ -36,9 +36,9 @@ class ModelConfig:
     show_mn_history = True
 
     # Global params
-    sim_cnt = 30
+    sim_cnt = 1000
 
-    seed = 'test'
+    seed = 'testt'
     iteration_count = 200
     area = AreaParams(x_min=-100, x_max=100, y_min=-100, y_max=100)
     mobile_node_params = MobileNodeParams(start_coords=Point(x=0, y=0), speed=1)
@@ -55,5 +55,10 @@ class ModelConfig:
     straight_move_range = (10, 30)  # How many iterations to move straight after a turn
 
     # Shadow prediction params
+    do_curve_fitting = True
     mn_history_usage = 5
     mn_history_count = 30
+
+    # Error ranges (absolute)
+    sn_distance_error_range = 0.4
+    mn_speed_error_range = 0

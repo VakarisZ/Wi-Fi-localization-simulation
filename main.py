@@ -45,10 +45,12 @@ for i in range(ModelConfig.sim_cnt):
             plt.pause(0.001)
 
     if ModelConfig.show_error_plots:
-        big_errors = [error for error in pred_error_handle.pred_errors if error.error > 1]
-        if big_errors:
-            fig, ax = plot_errors(pred_error_handle.pred_errors)
-            plt.close(fig)
+        if ModelConfig.show_only_big_error_plots:
+            big_errors = [error for error in pred_error_handle.pred_errors if error.error > 1]
+            if not big_errors:
+                continue
+        fig, ax = plot_errors(pred_error_handle.pred_errors)
+        plt.close(fig)
 
     all_errors.add_error_list(pred_error_handle.pred_errors)
 
@@ -60,4 +62,4 @@ if ModelConfig.show_global_error_plot:
 
     plot_global_errors(three_sn_errors, two_sn_errors, one_sn_errors)
 
-# input("Simulation finished")
+input("Simulation finished")

@@ -3,7 +3,7 @@ from model_space.utils.colision_avoidance import get_direction_by_danger_walls, 
     DangerWalls, get_best_angle_change
 from model_space.utils.deg_to_coord_converter import CoordsChange, normalize_trajectory_degrees
 from model_space.utils.mobile_node_utils.random_param_fetcher import get_random_angle_change, get_random_turn_sharpness, \
-    get_random_avoidance_turn_sharpness, get_random_trajectory
+    get_random_avoidance_turn_sharpness, get_random_trajectory, apply_random_error_to_speed
 from model_space.utils.mobile_node_utils.straight_mover import StraightMover
 from model_space.utils.mobile_node_utils.turner import Turner
 from model_space.utils.node import Node
@@ -54,9 +54,10 @@ class MobileNode(Node):
         self._move_in_dir(self.current_trajectory)
 
     def _move_in_dir(self, degrees: float):
+        speed = apply_random_error_to_speed(self.speed)
         if -360 > degrees > 360:
             raise Exception("Simplify the degrees of the angle!")
-        coord_change = CoordsChange(degrees, self.speed)
+        coord_change = CoordsChange(degrees, speed)
         self.coords.x += coord_change.x_change
         self.coords.y += coord_change.y_change
 

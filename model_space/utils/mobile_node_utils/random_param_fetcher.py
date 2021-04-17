@@ -24,3 +24,19 @@ def get_random_trajectory():
 
 def get_random_straight_move_iterations():
     return randrange(ModelConfig.straight_move_range[0], ModelConfig.straight_move_range[1])
+
+
+def apply_random_error_to_speed(speed: float):
+    if ModelConfig.mn_speed_error_range <= 0.001:
+        return speed
+    lower_error_boundary = -1 * ModelConfig.mn_speed_error_range * 1000
+    upper_error_boundary = ModelConfig.mn_speed_error_range * 1000
+    return speed + (randrange(lower_error_boundary, upper_error_boundary) / 1000)
+
+
+def apply_random_error_to_distance(distance: float):
+    if ModelConfig.sn_distance_error_range <= 0.001:
+        return distance
+    lower_error_boundary = -1 * ModelConfig.sn_distance_error_range * 1000
+    upper_error_boundary = ModelConfig.sn_distance_error_range * 1000
+    return distance + (randrange(lower_error_boundary, upper_error_boundary) / 1000)

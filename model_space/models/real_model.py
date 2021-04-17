@@ -2,9 +2,10 @@ import math
 from copy import deepcopy
 from typing import List
 
-from config import ModelConfig
+from config import ModelConfig, StationaryNodeParams
 from model_space.models.model_space import ModelSpace
 from model_space.prediction_model.prediction_params import PredictionParams
+from model_space.utils.mobile_node_utils.random_param_fetcher import apply_random_error_to_distance
 from model_space.utils.node import Node
 from model_space.utils.stationary_node import StationaryNode
 from plotter.model_drawer import ModelDrawer
@@ -16,6 +17,8 @@ class RealModel(ModelSpace):
 
     def do_iteration(self, i):
         self.model_state.mobile_node.move()
+        for sn in self.model_state.stationary_nodes:
+            sn.distance_to_mn = RealModel.calculate_distance_between_nodes(self.model_state.mobile_node, sn)
         if ModelConfig.show_simulation_plots:
             self.model_drawer.draw_state(self.model_state)
 
@@ -30,9 +33,11 @@ class RealModel(ModelSpace):
 
         for sn in self.model_state.stationary_nodes:
             if ModelDrawer.is_mn_reachable_from_sn(sn, mn):
-                distance = RealModel.calculate_distance_between_nodes(mn, sn)
-                sn.distance_to_mn = distance
-                sn_list.append(sn)
+                distance = apply_random_error_to_distance(RealModel.calculate_distance_between_nodes(mn, sn))
+                sn_params = StationaryNodeParams(location_coords=sn.coords, range=sn.range, id=sn.id)
+                new_sn = StationaryNode(sn_params)
+                new_sn.distance_to_mn = distance
+                sn_list.append(new_sn)
 
         return sn_list
 
