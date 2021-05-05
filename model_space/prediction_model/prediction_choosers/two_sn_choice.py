@@ -2,7 +2,6 @@ import math
 from typing import Tuple
 
 from model_space.utils.point import Point
-from model_space.utils.stationary_node import StationaryNode
 
 
 def get_correct_prediction(predictions: Tuple[Point, Point],

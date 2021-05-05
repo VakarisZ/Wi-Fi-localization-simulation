@@ -43,11 +43,11 @@ def plot_global_error_aggregates(errors: SnMethodErrorContainer, title: str):
     ax[0].plot([0, len(avg_errors) * 2], [errors.avg_sn_method_error, errors.avg_sn_method_error],
                color='red',
                marker='o',
-               label='Avg. error for this method')
+               label=f'Avg. error for this method({errors.avg_sn_method_error})')
     ax[0].plot([0, len(avg_errors) * 2], [errors.avg_pred_error, errors.avg_pred_error],
                color='black',
                marker='o',
-               label='Avg. error for all predictions')
+               label=f'Avg. error for all predictions({errors.avg_pred_error})')
     ax[0].legend()
 
     rects = ax[1].bar(x=range(0, len(avg_errors) * 2, 2),
@@ -60,4 +60,4 @@ def plot_global_error_aggregates(errors: SnMethodErrorContainer, title: str):
     ax[1].bar_label(rects, error_counts)
 
     plt.show()
-    plt.pause(0.01)
+    plt.pause(0.1)

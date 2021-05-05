@@ -8,20 +8,15 @@ from model_space.prediction_model.utils.prediction_dto import MnLocationPredicti
 from model_space.utils.point import Point
 
 
-MAX_PRED_LIST_LENGTH = ModelConfig.mn_history_count
-
-
 class MnPredictor:
-    def __init__(self, mn_pred_list: List[MnLocationPrediction],
-                 max_pred_list_len=MAX_PRED_LIST_LENGTH):
+    def __init__(self, mn_pred_list: List[MnLocationPrediction]):
         self.mn_pred_list = mn_pred_list
-        self.max_pred_list_len = max_pred_list_len
         self.mn_speed = ModelConfig.mobile_node_params.speed
 
     def do_prediction(self, pred_params: PredictionParams):
         prediction = self.get_mn_prediction(pred_params)
 
-        if len(self.mn_pred_list) > self.max_pred_list_len:
+        if len(self.mn_pred_list) > ModelConfig.mn_history_count:
             self.mn_pred_list.pop(0)
 
         self.mn_pred_list.append(prediction)

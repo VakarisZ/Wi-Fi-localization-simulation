@@ -15,6 +15,7 @@ class PlotWindow:
                           params.area.y_max + ModelConfig.draw_margin))
         self.ax.set_title(title)
         self.add_walls()
+        # Set reference for global plot to be available everywhere
 
     def add_point(self, x, y, color='red', markersize=5, marker='o'):
         return self.ax.plot(x, y, color=color, marker=marker, markersize=markersize)

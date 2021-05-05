@@ -14,6 +14,27 @@ class ModelDrawer:
         self.mobile_node = None
         self.draw_points(model_state)
         self.lines = []
+        self.history_line = None
+        self.curve_fit_line = None
+
+        if title == 'Prediction':
+            ModelConfig.prediction_plot = self
+        else:
+            ModelConfig.simulation_plot = self
+
+    def draw_history(self, xdata, ydata):
+        self.history_line = self.window.ax.plot(xdata, ydata, 'b-')
+
+    def draw_curve_fit_line(self, xdata, ydata):
+        self.curve_fit_line = self.window.ax.plot(xdata, ydata, 'og', markersize=3, alpha=0.5)
+
+    def clean_curve_fit(self):
+        if self.history_line:
+            self.history_line.pop(0).remove()
+
+    def clean_history(self):
+        if self.curve_fit_line:
+            self.curve_fit_line.pop(0).remove()
 
     def draw_state(self, model_state: ModelState):
         self.clean_state()
